@@ -28,17 +28,13 @@ object KafkaWordCount {
     var zkQuorum = "hadoop:2181"
     var group = "console-consumer-64668"
     var topics = "test"
-    var numThreads = "1";
+    var numThreads = "1"
 
     val sparkConf = new SparkConf().setAppName("KafkaWordCount").setMaster("local[2]")
     val ssc = new StreamingContext(sparkConf, Seconds(10))
     ssc.checkpoint("checkpoint")
 
-    val colors = Map("test" -> 1)
-
-
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap
-
     val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
     val words = lines.flatMap(_.split(" "))
     val wordCounts = words.map(x => (x, 1L)).reduceByKeyAndWindow(_ + _, _ - _, Minutes(10), Seconds(10), 2)
