@@ -25,10 +25,10 @@ import org.apache.spark.streaming.{Minutes, Seconds, StreamingContext}
 object KafkaWordCount {
   def main(args: Array[String]) {
 
-    var zkQuorum = "hadoop:2181"
-    var group = "console-consumer-64668"
-    var topics = "test"
-    var numThreads = "1"
+    val zkQuorum = "hadoop:2181"
+    val group = "console-consumer-64668"
+    val topics = "test"
+    val numThreads = "1"
 
     val sparkConf = new SparkConf().setAppName("KafkaWordCount").setMaster("local[2]")
     val ssc = new StreamingContext(sparkConf, Seconds(10))
